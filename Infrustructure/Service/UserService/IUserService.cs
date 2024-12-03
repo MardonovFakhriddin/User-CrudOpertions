@@ -2,9 +2,8 @@ namespace Infrustructure.Service.UserService;
 using Infrustructure.Models;
 public interface IUserService
 {
-    List<User> GetUser(User user);
-    User? GetStudentById(int id);
-    bool UpdateUser(int id);
-    bool CreateUser(User user);
-    bool DeleteUser(int id);
+    void AddUser(User user, string tableName);
+    void DeleteUser(int id, string tableName);
+    List<User> GetUserById(int id, string tableName);
+    void UpdateUser(User user, string tableName);
 }
