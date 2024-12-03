@@ -1,15 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using Infrustructure.Models;
+using Infrustructure.Service;
 using Infrustructure.Service.UserService;
+using Npgsql;
 
 class Program
 {
     static void Main(string[] args)
     {
-        string connectionString = "Server=localhost;Username=postgres;Password=LMard1909;Database=postgres";
+        string ConnectionString = "Server=localhost;Username=postgres;Password=LMard1909;Database=postgres";
+        Console.Write("Введите имя базы данных: ");
+        string databaseName = Console.ReadLine();
 
-        IUserService userService = new UserService(connectionString);
+        NpgsqlService.CreateDatabase( databaseName);
+
+         ConnectionString = $"Server=localhost;Username=postgres;Password=LMard1909;Database={databaseName}";
+
+        NpgsqlService.CreateTable(databaseName, "create table users " +
+                                                "(int id serial primary key," +
+                                                " string firstname not null," +
+                                                " string lastname not null," +
+                                                "int age not null)");
+
+        IUserService userService = new UserService(ConnectionString);
 
         while (true)
         {
