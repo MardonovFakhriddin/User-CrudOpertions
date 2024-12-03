@@ -9,19 +9,18 @@ class Program
 {
     static void Main(string[] args)
     {
-        string ConnectionString = "Server=localhost;Username=postgres;Password=LMard1909;Database=postgres";
+        string ConnectionString = $"Server=localhost;Username=postgres;Password=LMard1909;Database=postgres";
         Console.Write("Введите имя базы данных: ");
         string databaseName = Console.ReadLine();
-
+        
         NpgsqlService.CreateDatabase( databaseName);
-
-         ConnectionString = $"Server=localhost;Username=postgres;Password=LMard1909;Database={databaseName}";
-
+        
+        ConnectionString = $"Server=localhost;Username=postgres;Password=LMard1909;Database={databaseName}";
         NpgsqlService.CreateTable(databaseName, "create table users " +
-                                                "(int id serial primary key," +
-                                                " string firstname not null," +
-                                                " string lastname not null," +
-                                                "int age not null)");
+                                                "(id serial primary key," +
+                                                " firstname VARCHAR NOT NULL," +
+                                                " lastname varchar  not null," +
+                                                "age int  not null)");
 
         IUserService userService = new UserService(ConnectionString);
 
