@@ -1,5 +1,4 @@
 using System.Data;
-
 namespace Infrustructure.Service;
 using Npgsql;
 using Infrustructure.Common;
@@ -11,19 +10,20 @@ public static class NpgsqlService
         {
             using NpgsqlConnection connection = NpgsqlHelper.CreateConnection(SqlCommands.ConnectionString);
             NpgsqlCommand cmd = connection.CreateCommand();
-            NpgsqlParameter parameter = new NpgsqlParameter()
-            {
-                ParameterName = "@databaseName",
-                Value = databaseName,
-                DbType = DbType.String,
-                Size = 20,
-                IsNullable = false,
-            };
-
-            cmd.Parameters.Add(parameter);
-            cmd.CommandText = SqlCommands.CreateDatabase;
-            cmd.CommandTimeout = 40;
-            cmd.CommandType = CommandType.Text;
+            cmd.CommandText = $"Create database {databaseName};";
+            // NpgsqlParameter parameter = new NpgsqlParameter()
+            // {
+            //     ParameterName = "databaseName",
+            //     Value = databaseName,
+            //     DbType = DbType.String,
+            //     Size = 20,
+            //     IsNullable = false,
+            // };
+            //
+            // cmd.Parameters.Add(parameter);
+            // cmd.CommandText = SqlCommands.CreateDatabase;
+            // cmd.CommandTimeout = 40;
+            // cmd.CommandType = CommandType.Text;
             int res = cmd.ExecuteNonQuery();
 
             return res != 0 ? true : false;
@@ -31,7 +31,7 @@ public static class NpgsqlService
         catch (Exception e)
         {
             Console.WriteLine(e);
-            throw;
+            return false;
         }
     }
     
@@ -111,8 +111,8 @@ public static class NpgsqlService
 file static class SqlCommands
 {
     public const string ConnectionString =
-        "Serever = localhost;port = 5432; database = postgres;username = postgres;password = LMard1909;";
-    public const string CreateDatabase = "Create database @databaseName;";
-    public const string DropDatabase = "Drop database @databaeName with(force);";
+        "Server = localhost; Port = 5432; Database = postgres; username = postgres; password=LMard1909;";
+    // public const string CreateDatabase = $"Create database {databaseName};";
+    public const string DropDatabase = "Drop database @databaseName with(force);";
     public const string DropTable = "Drop table @tableName;";
 }

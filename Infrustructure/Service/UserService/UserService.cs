@@ -5,22 +5,15 @@ using Infrustructure.Common;
 using Infrustructure.Models;
 using Infrustructure.Service.UserService;
 
-public class UserService : IUserService
+public class UserService(string connectionString) : IUserService
 {
-    private readonly string _connectionString;
-
-    public UserService(string connectionString)
-    {
-        _connectionString = connectionString;
-    }
-
     public void AddUser(User user, string tableName)
     {
-        using (var connection = NpgsqlHelper.CreateConnection(_connectionString))
+        using (var connection = NpgsqlHelper.CreateConnection(connectionString))
         {
-            var command = new NpgsqlCommand($"INSERT INTO {tableName} (first_name, last_name, age) VALUES (@first_name, @last_name, @age)", connection);
-            command.Parameters.AddWithValue("first_name", user.FirstName);
-            command.Parameters.AddWithValue("last_name", user.LastName);
+            var command = new NpgsqlCommand($"INSERT INTO {tableName} (firstname, lastname, age) VALUES (@firstname, @lastname, @age)", connection);
+            command.Parameters.AddWithValue("firstname", user.FirstName);
+            command.Parameters.AddWithValue("lastname", user.LastName);
             command.Parameters.AddWithValue("age", user.Age);
             command.ExecuteNonQuery();
         }
@@ -28,7 +21,7 @@ public class UserService : IUserService
 
     public void DeleteUser(int id, string tableName)
     {
-        using (var connection = NpgsqlHelper.CreateConnection(_connectionString))
+        using (var connection = NpgsqlHelper.CreateConnection(connectionString))
         {
             var command = new NpgsqlCommand($"DELETE FROM {tableName} WHERE id = @id", connection);
             command.Parameters.AddWithValue("id", id);
@@ -40,7 +33,7 @@ public class UserService : IUserService
     {
         List<User> users = new List<User>();
 
-        using (var connection = NpgsqlHelper.CreateConnection(_connectionString))
+        using (var connection = NpgsqlHelper.CreateConnection(connectionString))
         {
             var command = new NpgsqlCommand($"SELECT * FROM {tableName} WHERE id = @id", connection);
             command.Parameters.AddWithValue("id", id);
@@ -69,16 +62,16 @@ public class UserService : IUserService
 
     public void UpdateUser(User user, string tableName)
     {
-        using (var connection = NpgsqlHelper.CreateConnection(_connectionString))
+        using (var connection = NpgsqlHelper.CreateConnection(connectionString))
         {
             var command = new NpgsqlCommand
             {
                 Connection = connection,
-                CommandText = $"UPDATE {tableName} SET first_name = @first_name, last_name = @last_name, age = @age WHERE id = @id"
+                CommandText = $"UPDATE {tableName} SET firstname = @firstname, lastname = @lastname, age = @age WHERE id = @id"
             };
 
-            command.Parameters.AddWithValue("first_name", user.FirstName);
-            command.Parameters.AddWithValue("last_name", user.LastName);
+            command.Parameters.AddWithValue("firstname", user.FirstName);
+            command.Parameters.AddWithValue("lastname", user.LastName);
             command.Parameters.AddWithValue("age", user.Age);
             command.Parameters.AddWithValue("id", user.Id);
 

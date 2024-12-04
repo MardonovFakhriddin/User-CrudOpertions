@@ -9,7 +9,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        string ConnectionString = $"Server=localhost;Username=postgres;Password=LMard1909;Database=postgres";
+        string ConnectionString = $"Server=localhost;Port=5432;Username=postgres;Password=LMard1909;Database=postgres";
         Console.Write("Введите имя базы данных: ");
         string databaseName = Console.ReadLine();
         
